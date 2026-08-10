@@ -4,7 +4,7 @@ const path = require('path');
 const DEFAULT_MODEL = 'gemini-3.5-flash';
 const CROP_SIZE = 250;
 const POEM_MIN_LENGTH = 7;
-const POEM_MAX_LENGTH = 20;
+const POEM_MAX_LENGTH = 25;
 
 const GEMINI_SCHEMA = {
     type: 'object',
@@ -174,16 +174,16 @@ async function generateDailyPoem() {
         try {
             book = await pickRandomBook();
             console.log(`Found "${book.title}"`);
-            
+
             const raw = await fetchTextSmart(getPlainTextUrl(book.formats));
             const body = extractBody(raw);
             const allWords = tokenize(body);
-            
+
             if (allWords.length < CROP_SIZE + 20) {
                 console.log('File too short, trying another...');
                 continue;
             }
-            
+
             const cropped = cropRandom(allWords);
             words = cropped.slice;
             cropStart = cropped.start;

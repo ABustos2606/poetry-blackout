@@ -63,4 +63,3 @@ If you want to test the generation script locally:
 
 ## Credits
 - Books via [Project Gutenberg](https://www.gutenberg.org/) (catalog searched via [Gutendex](https://gutendex.com/)).
-- AI redaction powered by Google's [Gemini API](https://aistudio.google.com/).
