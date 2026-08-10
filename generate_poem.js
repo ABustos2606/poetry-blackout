@@ -51,12 +51,15 @@ function getPlainTextUrl(formats) {
 }
 
 async function pickRandomBook() {
+    const topics = ['literature', 'arts', 'religion'];
+    const randomTopic = topics[Math.floor(Math.random() * topics.length)];
+    
     const params = new URLSearchParams({
         languages: 'en',
         mime_type: 'text/plain',
         copyright: 'false',
         sort: 'ascending',
-        topic: 'literature,arts,religion'
+        topic: randomTopic
     });
     const base = 'https://gutendex.com/books?' + params.toString();
     const first = await fetchJson(base);
@@ -65,11 +68,10 @@ async function pickRandomBook() {
     const maxPage = Math.max(1, Math.ceil(total / 32));
 
     for (let attempt = 0; attempt < 8; attempt++) {
-        let data = first;
-        if (attempt > 0) {
-            const page = 1 + Math.floor(Math.random() * maxPage);
-            data = await fetchJson(base + '&page=' + page);
-        }
+        const page = 1 + Math.floor(Math.random() * maxPage);
+        // If the random page happens to be 1, we can reuse 'first' to save a network request
+        const data = (page === 1) ? first : await fetchJson(base + '&page=' + page);
+        
         const candidates = (data.results || []).filter(b => !!getPlainTextUrl(b.formats));
         if (candidates.length) {
             return candidates[Math.floor(Math.random() * candidates.length)];
