@@ -19,16 +19,24 @@ const END_RE = /\*{3}\s*END OF (?:THE|THIS) PROJECT GUTENBERG EBOOK/i;
 
 async function fetchJson(url) {
     const headers = { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36' };
-    try {
-        const res = await fetch(url, { headers });
-        if (res.ok) return await res.json();
-    } catch (e) { /* ignore and try proxy */ }
-    
-    // Fallback to proxy if direct request is blocked (403 Forbidden is common on GitHub Actions)
-    const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url);
-    const res2 = await fetch(proxyUrl);
-    if (!res2.ok) throw new Error('HTTP ' + res2.status);
-    return res2.json();
+    const routes = [
+        { label: 'direct', build: u => u },
+        { label: 'corsproxy.io', build: u => 'https://corsproxy.io/?url=' + encodeURIComponent(u) },
+        { label: 'codetabs', build: u => 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(u) },
+        { label: 'allorigins', build: u => 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u) }
+    ];
+
+    let lastErr = null;
+    for (let i = 0; i < routes.length; i++) {
+        try {
+            const res = await fetch(routes[i].build(url), { headers });
+            if (res.ok) return await res.json();
+            throw new Error(`HTTP ${res.status}`);
+        } catch (e) {
+            lastErr = e;
+        }
+    }
+    throw lastErr;
 }
 
 function getPlainTextUrl(formats) {
