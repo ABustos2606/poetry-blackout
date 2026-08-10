@@ -18,9 +18,17 @@ const START_RE = /\*{3}\s*START OF (?:THE|THIS) PROJECT GUTENBERG EBOOK[^\n]*\n/
 const END_RE = /\*{3}\s*END OF (?:THE|THIS) PROJECT GUTENBERG EBOOK/i;
 
 async function fetchJson(url) {
-    const res = await fetch(url);
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    return res.json();
+    const headers = { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36' };
+    try {
+        const res = await fetch(url, { headers });
+        if (res.ok) return await res.json();
+    } catch (e) { /* ignore and try proxy */ }
+    
+    // Fallback to proxy if direct request is blocked (403 Forbidden is common on GitHub Actions)
+    const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url);
+    const res2 = await fetch(proxyUrl);
+    if (!res2.ok) throw new Error('HTTP ' + res2.status);
+    return res2.json();
 }
 
 function getPlainTextUrl(formats) {
