@@ -249,6 +249,24 @@ async function generateDailyPoem() {
     fs.mkdirSync(path.dirname(outPath), { recursive: true });
     fs.writeFileSync(outPath, JSON.stringify(outputData, null, 2), 'utf-8');
     console.log(`Successfully saved daily poem to ${outPath}`);
+
+    // --- Archive Management ---
+    const archivePath = path.join(__dirname, 'data', 'archive.json');
+    let archive = [];
+    if (fs.existsSync(archivePath)) {
+        try {
+            archive = JSON.parse(fs.readFileSync(archivePath, 'utf-8'));
+        } catch (e) {
+            console.error("Failed to parse existing archive.json, starting fresh.");
+        }
+    }
+    
+    // Add date to the archived entry
+    const archiveEntry = Object.assign({}, outputData, { date: new Date().toISOString().split('T')[0] });
+    archive.unshift(archiveEntry);
+    
+    fs.writeFileSync(archivePath, JSON.stringify(archive, null, 2), 'utf-8');
+    console.log(`Successfully appended poem to archive at ${archivePath}`);
 }
 
 generateDailyPoem().catch(err => {

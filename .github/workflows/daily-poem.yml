@@ -32,8 +32,8 @@ jobs:
         run: |
           git config --global user.name 'GitHub Action Bot'
           git config --global user.email 'action@github.com'
-          git add data/daily_poem.json
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Update daily poem" && git push)
+          git add data/daily_poem.json data/archive.json
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Update daily poem and archive" && git push)
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
