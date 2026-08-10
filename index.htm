@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <title>Blackout — a live redacted poem</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&amp;family=Source+Serif+4:wght@400;600;700&amp;family=Special+Elite&amp;display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="desk">
+
+        <h1 class="title">BLACK<span class="redact-letter">OUT</span></h1>
+        <p class="subtitle">A found poem, pulled from a random page of a public-domain book and redacted live by Gemini.
+        </p>
+
+        <div class="folder-tab">
+            <span>Exhibit · Gutenberg Archive</span>
+            <span id="caseNo">Case No. —–—</span>
+        </div>
+
+
+        <section class="page-stage" id="pageStage" hidden>
+            <div class="book-page" id="bookPage">
+                <div class="page-surface">
+                    <div class="word-grid" id="wordGrid" aria-hidden="true"></div>
+                </div>
+                <div class="source-tag">
+                    <span class="source-eyebrow">◆ source</span>
+                    <span class="source-title" id="sourceTitle"></span>
+                    <span class="source-author" id="sourceAuthor"></span>
+                </div>
+                <div class="stamp" id="stampEl" aria-hidden="true">
+                    <span class="stamp-main">Redacted</span>
+                    <span class="stamp-sub">by an algorithm</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="poem-extract" id="poemExtract" hidden>
+            <h2 class="section-eyebrow">the poem, unredacted</h2>
+            <p id="poemText"></p>
+            <div class="actions">
+                <button class="link-btn" id="copyBtn" type="button">⧉ copy poem</button>
+            </div>
+        </section>
+
+        <details class="how-it-works">
+            <summary>How this works</summary>
+            <p>Every day at midnight, a bot performs the following steps:</p>
+            <ol>
+                <li>It asks Gutendex (a public search API for Project Gutenberg) for a random English-language book.</li>
+                <li>The book's full text is downloaded, the legal boilerplate is trimmed off, and 250 consecutive words are cropped.</li>
+                <li>Those 250 words are sent to Gemini, which is asked to choose a few of them that read as a short poem, kept in their original order.</li>
+                <li>The resulting poem is saved and displayed here. Every other word is inked over — still there, holding the page together, just unreadable.</li>
+            </ol>
+        </details>
+
+        <footer>Books via Project Gutenberg (catalog by Gutendex). Poems via your own Gemini key. Not affiliated with
+            either.</footer>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

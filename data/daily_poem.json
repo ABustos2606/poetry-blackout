@@ -1,0 +1,13 @@
+{
+  "words": [
+    "A", "placeholder", "poem", "until", "the",
+    "first", "GitHub", "Action", "run", "completes."
+  ],
+  "indices": [0, 1, 2, 6, 7],
+  "book": {
+    "id": 0,
+    "title": "Welcome to the Daily Poem",
+    "authors": [{"name": "System"}]
+  },
+  "cropStart": 0
+}
