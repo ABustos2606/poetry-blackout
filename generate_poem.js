@@ -18,25 +18,18 @@ const START_RE = /\*{3}\s*START OF (?:THE|THIS) PROJECT GUTENBERG EBOOK[^\n]*\n/
 const END_RE = /\*{3}\s*END OF (?:THE|THIS) PROJECT GUTENBERG EBOOK/i;
 
 async function fetchJson(url) {
-    const headers = { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36' };
-    const routes = [
-        { label: 'direct', build: u => u },
-        { label: 'corsproxy.io', build: u => 'https://corsproxy.io/?url=' + encodeURIComponent(u) },
-        { label: 'codetabs', build: u => 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(u) },
-        { label: 'allorigins', build: u => 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u) }
-    ];
-
-    let lastErr = null;
-    for (let i = 0; i < routes.length; i++) {
-        try {
-            const res = await fetch(routes[i].build(url), { headers });
-            if (res.ok) return await res.json();
-            throw new Error(`HTTP ${res.status}`);
-        } catch (e) {
-            lastErr = e;
-        }
-    }
-    throw lastErr;
+    const rapidApiKey = process.env.RAPIDAPI_KEY;
+    if (!rapidApiKey) throw new Error("RAPIDAPI_KEY environment variable is not set.");
+    
+    const headers = { 
+        'x-rapidapi-host': 'project-gutenberg-free-books-api1.p.rapidapi.com',
+        'x-rapidapi-key': rapidApiKey,
+        'Content-Type': 'application/json'
+    };
+    
+    const res = await fetch(url, { headers });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return await res.json();
 }
 
 function getPlainTextUrl(formats) {
@@ -51,26 +44,15 @@ function getPlainTextUrl(formats) {
 }
 
 async function pickRandomBook() {
-    const topics = ['literature', 'arts', 'religion'];
+    const maxPages = { literature: 600, arts: 200, religion: 100 };
+    const topics = Object.keys(maxPages);
     const randomTopic = topics[Math.floor(Math.random() * topics.length)];
+    const maxPage = maxPages[randomTopic];
     
-    const params = new URLSearchParams({
-        languages: 'en',
-        mime_type: 'text/plain',
-        copyright: 'false',
-        sort: 'ascending',
-        topic: randomTopic
-    });
-    const base = 'https://gutendex.com/books?' + params.toString();
-    const first = await fetchJson(base);
-    const perPage = (first.results || []).length || 32;
-    const total = first.count || perPage;
-    const maxPage = Math.max(1, Math.ceil(total / 32));
-
     for (let attempt = 0; attempt < 8; attempt++) {
         const page = 1 + Math.floor(Math.random() * maxPage);
-        // If the random page happens to be 1, we can reuse 'first' to save a network request
-        const data = (page === 1) ? first : await fetchJson(base + '&page=' + page);
+        const url = `https://project-gutenberg-free-books-api1.p.rapidapi.com/books?topic=${randomTopic}&page=${page}`;
+        const data = await fetchJson(url);
         
         const candidates = (data.results || []).filter(b => !!getPlainTextUrl(b.formats));
         if (candidates.length) {
@@ -182,6 +164,10 @@ async function generateDailyPoem() {
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
         console.error("GEMINI_API_KEY environment variable is not set.");
+        process.exit(1);
+    }
+    if (!process.env.RAPIDAPI_KEY) {
+        console.error("RAPIDAPI_KEY environment variable is not set.");
         process.exit(1);
     }
     const model = process.env.GEMINI_MODEL || DEFAULT_MODEL;

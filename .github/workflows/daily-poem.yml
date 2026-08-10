@@ -26,6 +26,7 @@ jobs:
       - name: Generate Poem
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
         run: node generate_poem.js
         
       - name: Commit and push if changed
