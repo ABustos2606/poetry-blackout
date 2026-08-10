@@ -80,7 +80,7 @@
 
     async function loadDailyPoem() {
         try {
-            var res = await fetch('data/daily_poem.json');
+            var res = await fetch('data/daily_poem.json?t=' + new Date().getTime());
             if (!res.ok) throw new Error('HTTP ' + res.status);
             var data = await res.json();
             
