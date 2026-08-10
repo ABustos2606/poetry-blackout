@@ -18,7 +18,7 @@
     <div class="desk">
 
         <h1 class="title">BLACK<span class="redact-letter">OUT</span></h1>
-        <p class="subtitle">A found poem, pulled from a random page of a public-domain book and redacted live by Gemini.
+        <p class="subtitle">A found poem, extracted from a random redacted page of a public domain book.
         </p>
 
         <div class="folder-tab">
@@ -56,10 +56,14 @@
             <summary>How this works</summary>
             <p>Every day at midnight, a bot performs the following steps:</p>
             <ol>
-                <li>It asks Gutendex (a public search API for Project Gutenberg) for a random English-language book.</li>
-                <li>The book's full text is downloaded, the legal boilerplate is trimmed off, and 250 consecutive words are cropped.</li>
-                <li>Those 250 words are sent to Gemini, which is asked to choose a few of them that read as a short poem, kept in their original order.</li>
-                <li>The resulting poem is saved and displayed here. Every other word is inked over — still there, holding the page together, just unreadable.</li>
+                <li>It asks Gutendex (a public search API for Project Gutenberg) for a random English-language book.
+                </li>
+                <li>The book's full text is downloaded, the legal boilerplate is trimmed off, and 250 consecutive words
+                    are cropped.</li>
+                <li>Those 250 words are sent to Gemini, which is asked to choose a few of them that read as a short
+                    poem, kept in their original order.</li>
+                <li>The resulting poem is saved and displayed here. Every other word is inked over — still there,
+                    holding the page together, just unreadable.</li>
             </ol>
         </details>
 

@@ -55,7 +55,8 @@ async function pickRandomBook() {
         languages: 'en',
         mime_type: 'text/plain',
         copyright: 'false',
-        sort: 'ascending'
+        sort: 'ascending',
+        topic: 'literature,arts,religion'
     });
     const base = 'https://gutendex.com/books?' + params.toString();
     const first = await fetchJson(base);
