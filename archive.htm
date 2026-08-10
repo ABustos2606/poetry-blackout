@@ -71,6 +71,18 @@
             border: 1px dashed rgba(33, 28, 20, .3);
             border-radius: 6px;
         }
+        
+        .pagination {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 2rem;
+            padding-top: 1.2rem;
+            border-top: 1px dashed rgba(33, 28, 20, .15);
+            font-family: 'Special Elite', monospace;
+            font-size: .85rem;
+            color: var(--filed);
+        }
     </style>
 </head>
 
@@ -95,6 +107,12 @@
             <div id="archiveContainer" class="archive-list">
                 <!-- Archive entries will be injected here -->
                 <div class="empty-state">Loading archives...</div>
+            </div>
+            
+            <div class="pagination" id="paginationControls" style="display: none;">
+                <button id="prevBtn" class="link-btn" disabled>&laquo; Newer</button>
+                <span id="pageIndicator">Page 1 of 1</span>
+                <button id="nextBtn" class="link-btn" disabled>Older &raquo;</button>
             </div>
         </div>
 
