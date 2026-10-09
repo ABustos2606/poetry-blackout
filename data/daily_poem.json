@@ -1,5 +1,6 @@
 {
   "words": [
+    "0-7.27",
     "7.27c.34",
     "2.8",
     "2.56",
@@ -248,36 +249,31 @@
     "<li>",
     "<a",
     "href=\"/policy/permission.html\"",
-    "title=\"Permissions,",
-    "Licensing"
+    "title=\"Permissions,"
   ],
   "indices": [
-    171,
-    175,
-    176,
-    177,
-    180,
-    182,
-    183,
-    184,
+    186,
     187,
-    197,
-    201,
-    202
+    188,
+    189,
+    190,
+    200,
+    203,
+    204,
+    205,
+    206,
+    207,
+    208
   ],
   "book": {
-    "id": 6841,
-    "title": "Mosaics of Grecian History",
+    "id": 24440,
+    "title": "Surgical Anatomy",
     "authors": [
       {
-        "id": 48341,
-        "name": "Willson, Marcius"
-      },
-      {
-        "id": 48342,
-        "name": "Wilson, Robert Pierpont"
+        "id": 11111,
+        "name": "Maclise, Joseph"
       }
     ]
   },
-  "cropStart": 163
+  "cropStart": 162
 }
